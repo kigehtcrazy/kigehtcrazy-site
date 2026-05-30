@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI geht crazy – Drogen & Sucht Aufklärung</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #ff3c5f;
+    --accent2: #ffb800;
+    --accent3: #00e5ff;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --card: #14141f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    padding: 80px 5vw 60px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,60,95,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -1px;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.4s;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    margin-top: 24px;
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.6s;
+  }
+
+  /* NAV */
+  nav {
+    padding: 16px 5vw;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* SECTIONS */
+  .section {
+    padding: 80px 5vw;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1;
+    margin-bottom: 48px;
+    color: var(--text);
+  }
+
+  /* DRUG GRID */
+  .drug-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .drug-card {
+    background: var(--card);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .drug-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--drug-color, var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .drug-card:hover { background: #191928; }
+  .drug-card:hover::before { transform: scaleX(1); }
+
+  .drug-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .drug-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .drug-risk {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .risk-extreme { background: rgba(255,60,95,0.15); color: var(--accent); border: 1px solid rgba(255,60,95,0.3); }
+  .risk-high { background: rgba(255,184,0,0.15); color: var(--accent2); border: 1px solid rgba(255,184,0,0.3); }
+  .risk-medium { background: rgba(0,229,255,0.1); color: var(--accent3); border: 1px solid rgba(0,229,255,0.2); }
+
+  .drug-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .drug-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fact-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .fact-label {
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+
+  .fact-value { color: var(--text); line-height: 1.5; }
+
+  /* SUCHT SECTION */
+  .addiction-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 700px) { .addiction-grid { grid-template-columns: 1fr; } }
+
+  .addiction-block {
+    background: var(--card);
+    padding: 40px;
+  }
+
+  .block-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .block-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .block-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  .block-text strong { color: var(--accent2); }
+
+  /* PSYCHO SECTION */
+  .psycho-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .psycho-card {
+    border: 1px solid var(--border);
+    padding: 28px;
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .psycho-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(0,229,255,0.05), transparent);
+  }
+
+  .psycho-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .psycho-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--accent3);
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .psycho-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* MINDSET BLOCK */
+  .mindset-block {
+    background: linear-gradient(135deg, #0f0f1a, #1a0f1f);
+    border: 1px solid var(--border);
+    padding: 56px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 48px;
+  }
+
+  .mindset-block::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: rgba(255,60,95,0.05);
+    pointer-events: none;
+  }
+
+  .mindset-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 4vw, 48px);
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+
+  .mindset-quote span { color: var(--accent); }
+
+  .mindset-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 700px;
+  }
+
+  /* HELP SECTION */
+  .help-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 32px;
+  }
+
+  .help-list li {
+    background: var(--card);
+    padding: 20px 28px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: background 0.2s;
+  }
+
+  .help-list li:hover { background: #191928; }
+
+  .help-list li span:first-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+
+  /* IDEA FORM */
+  .idea-section {
+    padding: 80px 5vw;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .idea-inner {
+    max-width: 700px;
+  }
+
+  .idea-section .section-label { margin-bottom: 8px; }
+  .idea-section .section-title { margin-bottom: 12px; }
+
+  .idea-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.7;
+  }
+
+  .submit-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    padding: 16px 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .submit-btn:hover { background: #e02a50; transform: translateY(-1px); }
+
+  .success-msg {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 20px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent3);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .fs-success-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 28px 32px;
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.25);
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .fs-success-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent3);
+    line-height: 1;
+    min-width: 36px;
+  }
+
+  .fs-success-text {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .fs-success-text strong {
+    font-size: 17px;
+    color: var(--accent3);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* TIKTOK FOOTER */
+  footer {
+    padding: 48px 5vw;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-left {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    line-height: 1.7;
+  }
+
+  .tiktok-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 24px;
+    text-decoration: none;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.25s;
+  }
+
+  .tiktok-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tiktok-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: rgba(255,184,0,0.06);
+    border: 1px solid rgba(255,184,0,0.2);
+    padding: 16px 24px;
+    margin: 0 5vw 0;
+    font-size: 12px;
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .mindset-block { padding: 32px 24px; }
+    .addiction-block { padding: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">// Aufklärung &amp; Wissen — kein Aufruf zum Konsum</div>
+  <h1>DROGEN<br><span>&amp; SUCHT</span></h1>
+  <p class="header-sub">Fakten statt Mythen. Was steckt hinter den bekanntesten Substanzen, wie entsteht Abhängigkeit – und wie kommt man da wieder raus? Content von <strong>@kigehtcrazy</strong>.</p>
+</header>
+
+<div class="disclaimer">
+  ⚠ Diese Seite dient ausschließlich der Aufklärung. Drogenkonsum ist gefährlich, in vielen Fällen illegal und kann zu schwerer Abhängigkeit, gesundheitlichem Schaden oder Tod führen.
+</div>
+
+<nav>
+  <a href="#drogen">Substanzen</a>
+  <a href="#sucht">Sucht</a>
+  <a href="#psycho">Psychologie</a>
+  <a href="#mindset">Mindset</a>
+  <a href="#hilfe">Hilfe</a>
+  <a href="#ideen">Videoideen</a>
+</nav>
+
+<!-- DROGEN SECTION -->
+<section class="section" id="drogen">
+  <div class="section-label">// 01 — Substanzen</div>
+  <div class="section-title fade-in">DIE SUBSTANZEN</div>
+
+  <div class="drug-grid">
+
+    <div class="drug-card fade-in" style="--drug-color: #9b59b6;">
+      <div class="drug-card-header">
+        <div class="drug-name">SALVIA</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">Salvia divinorum ist eine mexikanische Heilpflanze mit extrem kurzem, aber intensivem psychedelischen Rausch. Wirkt über Kappa-Opioid-Rezeptoren – völlig anders als klassische Psychedelika.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">5–20 Min., intensive Dissoziation, Realitätsverlust</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Panikattacken, psychischer Schaden bei Vorbelastung</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich kaum – psychisch möglich</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #27ae60;">
+      <div class="drug-card-header">
+        <div class="drug-name">CANNABIS</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">THC beeinflusst das Endocannabinoid-System und erzeugt Entspannung, Euphorie oder Paranoia. Eine der weltweit meistkonsumierten Substanzen – trotzdem unterschätzt.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Entspannung, Hunger, verlangsamtes Denken, Paranoia</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Cannabis-induzierte Psychose, Motivationsverlust</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch stark (CUD betrifft ~9% der Nutzer)</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #e74c3c;">
+      <div class="drug-card-header">
+        <div class="drug-name">CRYSTAL METH</div>
+        <div class="drug-risk risk-extreme">Extrem</div>
+      </div>
+      <p class="drug-desc">Methamphetamin überflutet das Gehirn mit Dopamin – bis zu 1.250% des normalen Levels. Das Belohnungssystem wird dauerhaft zerstört. Hochgradig abhängig machend.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Euphorie, kein Schlaf, extremer Energieschub</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Zahnverfall, Psychosen, Herzversagen, Gehirnschaden</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Extrem – bereits nach 1–2 Mal möglich</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #f39c12;">
+      <div class="drug-card-header">
+        <div class="drug-name">SPEED</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Amphetamin (Speed) ist ein Aufputschmittel, das Dopamin und Noradrenalin ausschüttet. Beliebt bei Partys und leistungssteigerndem Missbrauch.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Wachheit, Euphorie, kein Hunger, Selbstüberschätzung</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Herzprobleme, Paranoia, schwere Depression danach</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch sehr stark</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #8e44ad;">
+      <div class="drug-card-header">
+        <div class="drug-name">MAGIC MUSHROOMS</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">Psilocybin ist der Wirkstoff in psychedelischen Pilzen. Es aktiviert Serotonin-Rezeptoren und verändert die Wahrnehmung tiefgreifend. Wird aktuell in der Psychiatrie erforscht.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Halluzinationen, tiefe Emotionen, Zeitverlust, Mystik</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Bad Trips, HPPD, Auslöser für Psychosen</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich nein – Toleranz entsteht schnell</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #7f8c8d;">
+      <div class="drug-card-header">
+        <div class="drug-name">LEAN</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Lean (Purple Drank) ist ein Mix aus Codein-Hustensaft und Limonade. Durch Rap-Kultur popularisiert, aber extrem gefährlich – Atemstillstand möglich.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Sedierung, Euphorie, verlangsamte Motorik</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Atemstillstand, Herzrhythmusstörungen, Tod</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich stark (Opioid-Abhängigkeit)</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #3498db;">
+      <div class="drug-card-header">
+        <div class="drug-name">XANAX</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Alprazolam ist ein Benzodiazepin (Beruhigungsmittel), ursprünglich als Angst- und Panikstörungs-Medikament. Auf dem Schwarzmarkt oft gefälscht – mit Fentanyl versetzt.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Entspannung, Schläfrigkeit, Angstlösung</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Gedächtnisverlust, Atemdepression, Entzugskrämpfe</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich extrem stark – Entzug lebensgefährlich</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #00e5ff;">
+      <div class="drug-card-header">
+        <div class="drug-name">KETAMIN</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Ketamin ist ein Narkosemittel, das dissoziative Zustände erzeugt. In der Medizin als Anästhetikum und neuerdings bei Depression eingesetzt, auf Partys aber missbraucht.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">K-Hole, Dissoziation, Out-of-Body-Erlebnisse</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Blasenversagen bei regelmäßigem Konsum, Sucht</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch stark</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #e91e63;">
+      <div class="drug-card-header">
+        <div class="drug-name">MDMA</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Ecstasy/MDMA flutet das Gehirn mit Serotonin, Dopamin und Noradrenalin. Das Ergebnis: intensive Gefühle von Liebe und Verbundenheit – gefolgt von tagelangem Crash.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Euphorie, Empathie, erhöhte Herzfrequenz, Tanz</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Serotonin-Syndrom, Überhitzung, neurotoxisch</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch – körperliche Toleranz entsteht schnell</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #ff3c5f;">
+      <div class="drug-card-header">
+        <div class="drug-name">FENTANYL</div>
+        <div class="drug-risk risk-extreme">Tödlich</div>
+      </div>
+      <p class="drug-desc">Fentanyl ist ein synthetisches Opioid – 100× stärker als Morphin. Winzige Mengen reichen für eine tödliche Überdosis. In Deutschland zunehmend als Beimischung in anderen Drogen gefunden.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Extreme Sedierung, Schmerzlosigkeit, Euphorie</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Atemstillstand, Tod – 2mg = letale Dosis</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Extrem körperlich abhängig machend</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #e67e22;">
+      <div class="drug-card-header">
+        <div class="drug-name">TILIDIN</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Tilidin ist ein verschreibungspflichtiges Opioid-Schmerzmittel – in Deutschland stark verbreitet und auf der Straße als "Tili" bekannt. Besonders in der Rap- und Jugendkultur glorifiziert, dabei hochgradig abhängig machend.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Schmerzlinderung, Euphorie, Entspannung, Benommenheit</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Atemstillstand, schwere körperliche Abhängigkeit, Entzugssyndrom</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Extrem – körperlich und psychisch, sehr schnell</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #a8e6cf;">
+      <div class="drug-card-header">
+        <div class="drug-name">LACHGAS</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">Distickstoffmonoxid (N₂O) – ursprünglich als Narkosemittel entwickelt, heute als Partydroge aus Kapseln oder Ballons inhaliert. In Deutschland seit 2024 für unter 18-Jährige verboten.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Kurze Euphorie (30–60 Sek.), Schwindel, Lachen, Dissoziation</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Sauerstoffmangel, Vitamin-B12-Mangel, Lähmungen, Ohnmacht</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch möglich, körperlich gering</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #e040fb;">
+      <div class="drug-card-header">
+        <div class="drug-name">PCP</div>
+        <div class="drug-risk risk-extreme">Extrem</div>
+      </div>
+      <p class="drug-desc">Phencyclidin ist ein dissoziativer Wirkstoff der 1950er als Narkosemittel entwickelt wurde. Wegen extremer Nebenwirkungen schnell verboten – heute eine der gefährlichsten Straßendrogen überhaupt.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Halluzinationen, Taubheit, Aggression, völliger Realitätsverlust</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Psychosen, extreme Gewalt, Selbstverletzung, Tod</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Psychisch stark, körperlich möglich</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #ff8f00;">
+      <div class="drug-card-header">
+        <div class="drug-name">MESKALIN</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">Meskalin ist ein natürliches Psychedelikum aus dem Peyote-Kaktus. Seit Jahrtausenden in indigenen Ritualen genutzt – wirkt ähnlich wie LSD, aber länger und mit stärkerer körperlicher Komponente.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">8–12 Std., intensive Halluzinationen, Übelkeit, Empathie</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Bad Trips, Auslöser für Psychosen, starke Übelkeit</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich nein – schnelle Toleranz</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #26c6da;">
+      <div class="drug-card-header">
+        <div class="drug-name">GHB</div>
+        <div class="drug-risk risk-extreme">Extrem</div>
+      </div>
+      <p class="drug-desc">Gamma-Hydroxybuttersäure – bekannt als "Liquid Ecstasy" oder KO-Tropfen. Die Dosierungsspanne zwischen Rausch und Ohnmacht ist erschreckend gering. Wird für K.O.-Tropfen-Angriffe missbraucht.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Euphorie, Enthemmung, Schläfrigkeit, Gedächtnisaussetzer</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Atemstillstand, Koma, Tod – winzige Überdosis reicht</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich stark – Entzug lebensgefährlich</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #66bb6a;">
+      <div class="drug-card-header">
+        <div class="drug-name">KRATOM</div>
+        <div class="drug-risk risk-medium">Mittel</div>
+      </div>
+      <p class="drug-desc">Kratom ist eine südostasiatische Pflanze mit opioidähnlicher Wirkung. In Deutschland legal, aber als "natürliche" Droge stark unterschätzt. Wird oft als Opioid-Ersatz missbraucht.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Niedrig: Stimulanz – Hoch: Sedierung, Schmerzlinderung</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Leberschäden, Entzugssymptome, Herzprobleme</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Körperlich und psychisch – wird oft unterschätzt</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #b0bec5;">
+      <div class="drug-card-header">
+        <div class="drug-name">NIKOTIN</div>
+        <div class="drug-risk risk-high">Hoch</div>
+      </div>
+      <p class="drug-desc">Nikotin ist eine der am stärksten abhängig machenden Substanzen überhaupt – vergleichbar mit Heroin in Bezug auf das Suchtpotenzial. Durch gesellschaftliche Akzeptanz massiv unterschätzt.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Kurze Entspannung, Konzentration, Dopaminausschüttung</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Krebs, Herzerkrankungen, Schlaganfall – tötet 8 Mio./Jahr</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Extrem – körperlich und psychisch</span></div>
+      </div>
+    </div>
+
+    <div class="drug-card fade-in" style="--drug-color: #ffca28;">
+      <div class="drug-card-header">
+        <div class="drug-name">ALKOHOL</div>
+        <div class="drug-risk risk-extreme">Extrem</div>
+      </div>
+      <p class="drug-desc">Die gefährlichste legale Droge der Welt. Alkohol ist ein Zellgift, das nahezu jedes Organ schädigt. Trotzdem gesellschaftlich normalisiert – dabei tötet Alkohol in Deutschland mehr Menschen als alle illegalen Drogen zusammen.</p>
+      <div class="drug-facts">
+        <div class="fact-item"><span class="fact-label">Wirkung</span><span class="fact-value">Enthemmung, Euphorie, Koordinationsverlust, Blackouts</span></div>
+        <div class="fact-item"><span class="fact-label">Risiko</span><span class="fact-value">Leberzirrhose, Hirnschäden, Krebs, soziale Zerstörung</span></div>
+        <div class="fact-item"><span class="fact-label">Abhängig?</span><span class="fact-value">Extrem – Entzug kann tödlich sein (Delir)</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SUCHT SECTION -->
+<section class="section" id="sucht">
+  <div class="section-label">// 02 — Abhängigkeit</div>
+  <div class="section-title fade-in">WIE SUCHT<br>ENTSTEHT</div>
+
+  <div class="addiction-grid">
+    <div class="addiction-block fade-in">
+      <div class="block-number">01</div>
+      <div class="block-title">Das Dopamin-System</div>
+      <p class="block-text">Jede Droge kapert das natürliche Belohnungssystem. Dopamin – eigentlich für echte Freude reserviert – wird <strong>künstlich ausgeschüttet</strong>. Das Gehirn lernt: "Das ist besser als alles Natürliche." Normale Dinge wie Essen, Sport oder Freunde lösen danach kaum noch Freude aus.</p>
+    </div>
+    <div class="addiction-block fade-in">
+      <div class="block-number">02</div>
+      <div class="block-title">Toleranz & Kontrollverlust</div>
+      <p class="block-text">Der Körper gewöhnt sich an die Substanz. Die gleiche Menge reicht nicht mehr – man braucht mehr für den gleichen Effekt. Gleichzeitig verliert man die <strong>Fähigkeit, Nein zu sagen</strong>. Der präfrontale Kortex (Vernunft) verliert gegen das Limbische System (Triebe).</p>
+    </div>
+    <div class="addiction-block fade-in">
+      <div class="block-number">03</div>
+      <div class="block-title">Trigger & Rückfall</div>
+      <p class="block-text">Orte, Gerüche, Musik, bestimmte Menschen – das Gehirn verknüpft alles mit der Droge. Diese <strong>konditionierten Reize</strong> können auch nach Jahren Abstinenz starkes Verlangen auslösen. Deshalb ist Sucht eine Erkrankung des Gehirns, kein Willensproblem.</p>
+    </div>
+    <div class="addiction-block fade-in">
+      <div class="block-number">04</div>
+      <div class="block-title">Der Entzug</div>
+      <p class="block-text">Ohne die Substanz bricht das System zusammen. Je nach Droge: Schweißausbrüche, Krämpfe, Angst, Schlaflosigkeit, Depression, Herzrasen. Bei Alkohol und Benzodiazepinen kann der Entzug <strong>lebensgefährlich</strong> sein. Nie alleine versuchen.</p>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top: 48px;">// Was man dagegen tun kann</div>
+  <ul class="help-list fade-in">
+    <li><span>→</span><span><strong style="color: var(--text);">Professionelle Hilfe:</strong> Suchtberatungsstellen (kostenlos, anonym) sind der erste Schritt. Keine Schande – Sucht ist eine Krankheit, kein Versagen.</span></li>
+    <li><span>→</span><span><strong style="color: var(--text);">Medizinischer Entzug:</strong> Bei körperlicher Abhängigkeit (Opioide, Benzo, Alkohol) immer unter ärztlicher Aufsicht. Substitutionsbehandlung wie Methadon rettet Leben.</span></li>
+    <li><span>→</span><span><strong style="color: var(--text);">Therapie:</strong> Kognitive Verhaltenstherapie (KVT) hilft, Denkmuster und Auslöser zu erkennen und zu verändern. Oft das Wirksamste langfristig.</span></li>
+    <li><span>→</span><span><strong style="color: var(--text);">Umfeld ändern:</strong> Kontakt zu konsumierende Personen trennen, neue Routinen aufbauen, Sport als natürlichen Dopamin-Kick nutzen.</span></li>
+    <li><span>→</span><span><strong style="color: var(--text);">Selbsthilfegruppen:</strong> NA (Narcotics Anonymous), AA – Gemeinschaft mit anderen Betroffenen wirkt oft stärker als jede Therapie.</span></li>
+  </ul>
+</section>
+
+<!-- PSYCHO SECTION -->
+<section class="section" id="psycho">
+  <div class="section-label">// 03 — Psychologie</div>
+  <div class="section-title fade-in">PSYCHOLOGISCHE<br>FAKTOREN</div>
+
+  <div class="psycho-cards">
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">📉</div>
+      <div class="psycho-title">Wenn Noten egal werden</div>
+      <p class="psycho-text">Drogen – besonders Cannabis und Stimulanzien – fluten das Belohnungssystem so stark, dass normale Motivation verblasst. Schule, Karriere, Zukunft fühlen sich plötzlich bedeutungslos an. Das ist kein Charakter – das ist Neurochemie. Das Gehirn hat sich neu kalibriert.</p>
+    </div>
+
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">😤</div>
+      <div class="psycho-title">Warum einen manche nerven</div>
+      <p class="psycho-text">Erhöhte Reizbarkeit ist ein klassisches Symptom von Entzug, Schlafmangel durch Substanzkonsum oder auch durch soziale Anhedonie (Unfähigkeit, Freude in Gesellschaft zu fühlen). Menschen können sich leer und isoliert fühlen – und Außenstimulation als überwindend empfinden.</p>
+    </div>
+
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">🔄</div>
+      <div class="psycho-title">Eskapismus & Flucht</div>
+      <p class="psycho-text">Viele Menschen beginnen Drogen zu nehmen, um vor Problemen, Trauma oder Langeweile zu fliehen. Die Substanz wird zum Coping-Mechanismus – bis sie selbst zum Problem wird. Dieser Kreislauf ist psychologisch tief verankert.</p>
+    </div>
+
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">🧠</div>
+      <div class="psycho-title">Soziale Verstärkung</div>
+      <p class="psycho-text">Peer-Pressure, Rap-Glorifizierung, Social-Media-Ästhetik rund um Drogen – das soziale Umfeld verstärkt Konsum massiv. Das Gehirn verbindet Zugehörigkeit mit der Substanz. Besonders in der Adoleszenz ist dieser Effekt extrem stark.</p>
+    </div>
+
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">💭</div>
+      <div class="psycho-title">Kognitive Verzerrung</div>
+      <p class="psycho-text">"Ich kann aufhören wann ich will", "Ich hab's im Griff", "Andere machen das auch" – diese Gedankenmuster schützen das Suchtverhalten. Das Gehirn rationalisiert, weil es die Substanz braucht. Erkennen dieser Muster ist der erste Schritt raus.</p>
+    </div>
+
+    <div class="psycho-card fade-in">
+      <div class="psycho-icon">⚡</div>
+      <div class="psycho-title">Dopamin-Defizit danach</div>
+      <p class="psycho-text">Nach intensivem Drogenkonsum fällt der Dopamin-Spiegel unter den Normalwert. Alles fühlt sich grau, leer, sinnlos an. Dieser Post-High-Crash treibt viele zurück in den Konsum – nicht aus Genuss, sondern um sich überhaupt normal zu fühlen.</p>
+    </div>
+  </div>
+
+  <!-- MINDSET BLOCK -->
+  <div class="mindset-block fade-in" id="mindset">
+    <div class="mindset-quote">LAUF UND HÖR<br><span>NICHT AUF.</span></div>
+    <p class="mindset-text">
+      Es gibt ein Mindset, das stärker ist als jede Droge: <strong style="color: var(--accent2);">radikale Bewegung in einem Zustand des Flow</strong>. Wie beim Sacchi-Video – 600 Kilometer, während er lernte, während er lief, und einfach nicht aufhörte. Das ist kein Zufall. Sport und Ausdauer sind die mächtigsten natürlichen Drogenersatzstoffe, die existieren. Adrenalin, Endorphine, Dopamin – alles auf einmal, ohne Crash danach. Wer einmal verstanden hat, dass dieser Flow-State ohne Substanzen erreichbar ist, braucht die künstliche Version nicht mehr. Das ist keine Motivation – das ist Biologie.
+    </p>
+  </div>
+</section>
+
+<!-- HILFE SECTION -->
+<section class="section" id="hilfe">
+  <div class="section-label">// 04 — Notfallnummern</div>
+  <div class="section-title fade-in">HILFE HOLEN</div>
+  <ul class="help-list fade-in">
+    <li><span>📞</span><span><strong style="color: var(--text);">Telefonseelsorge:</strong> 0800 111 0 111 oder 0800 111 0 222 (kostenlos, 24/7, anonym)</span></li>
+    <li><span>💊</span><span><strong style="color: var(--text);">Sucht &amp; Drogen Hotline:</strong> 01806 313 031 (Bundeszentrale für gesundheitliche Aufklärung)</span></li>
+    <li><span>🌐</span><span><strong style="color: var(--text);">Online-Beratung:</strong> <a href="https://www.drugcom.de" target="_blank" style="color: var(--accent3);">drugcom.de</a> – anonyme Beratung, Selbsttests, Info</span></li>
+    <li><span>🚨</span><span><strong style="color: var(--text);">Notruf:</strong> 112 – bei Überdosis sofort rufen, keine Zeit verlieren</span></li>
+  </ul>
+</section>
+
+<!-- IDEA FORM SECTION -->
+<section class="idea-section" id="ideen">
+  <div class="idea-inner">
+    <div class="section-label">// 05 — Community</div>
+    <div class="section-title">VIDEOIDEEN<br>EINSCHICKEN</div>
+    <p class="idea-subtitle">
+      Du hast eine Idee für ein Video auf dem Kanal <strong>@kigehtcrazy</strong>? Schreib sie direkt rein – vielleicht wird sie zum nächsten Clip.
+    </p>
+
+    <div data-fs-success class="fs-success-box" style="display:none;">
+      <div class="fs-success-icon">✓</div><div class="fs-success-text"><strong>Idee eingereicht!</strong><br>Deine Videoidee ist angekommen – vielleicht wird sie der nächste Clip. 🎬</div>
+    </div>
+    <div data-fs-error style="display:none; color: var(--accent); font-family: 'Space Mono', monospace; font-size: 12px; margin-bottom: 16px;"></div>
+
+    <form id="idea-form">
+      <div class="form-group">
+        <label class="form-label" for="name-input">Dein Name / Nickname (optional)</label>
+        <input class="form-input" id="name-input" name="name" type="text" placeholder="z.B. anonymous_fan" data-fs-field>
+        <span data-fs-error="name" style="color: var(--accent); font-size: 11px;"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="idea-input">Deine Videoidee *</label>
+        <textarea class="form-textarea" id="idea-input" name="message" placeholder="z.B. Erkläre den Unterschied zwischen Amphetamin und Methamphetamin auf TikTok-taugliche Weise..." required data-fs-field></textarea>
+        <span data-fs-error="message" style="color: var(--accent); font-size: 11px;"></span>
+      </div>
+
+      <button type="submit" class="submit-btn" data-fs-submit-btn>
+        IDEE SENDEN →
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    Aufklärungsseite von<br>
+    <strong style="color: var(--text);">@kigehtcrazy</strong><br>
+    Kein Aufruf zum Konsum.
+  </div>
+
+  <a href="https://www.tiktok.com/@kigehtcrazy" target="_blank" class="tiktok-link">
+    <svg class="tiktok-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+    </svg>
+    @kigehtcrazy auf TikTok
+  </a>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+<!-- Formspree AJAX -->
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#idea-form', formId: 'mpqnbvbp' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+</body>
+</html>
